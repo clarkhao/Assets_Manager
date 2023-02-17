@@ -13,7 +13,8 @@ exports.authHandler = void 0;
 const utils_1 = require("../utils");
 const authHandler = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const authHeader = req.headers['Authorization'];
+        const authHeader = req.headers['authorization'] || req.headers['Authorization'];
+        utils_1.debugLogger.debug(`from auth middleware: ${authHeader}`);
         if (authHeader) {
             const token = authHeader.split(' ')[1];
             (0, utils_1.validateToken)(token).then(res => {

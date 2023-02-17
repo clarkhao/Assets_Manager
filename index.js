@@ -15,8 +15,10 @@ const port = config.get('server.port');
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(middleware_1.loggerHandler);
+app.use(express_1.default.static('public'));
 app.use(router_1.routerApiDoc);
 app.use(middleware_1.authHandler);
+app.use(router_1.fileRouter);
 app.use(middleware_1.errorHandler);
 app.listen(port, () => {
     console.log(`
