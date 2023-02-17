@@ -1,4 +1,5 @@
 import express from 'express';
+import {uploadHandler} from '../.././../controller';
 
 //add authentication middleware
 const fileRouter = express.Router();
@@ -171,7 +172,7 @@ const fileRouter = express.Router();
  *         $ref: '#/components/responses/ServerMistake'
  */
 
-fileRouter.post('/files', () => { });
+fileRouter.post('/files', uploadHandler);
 fileRouter.get('/files', () => { });
 fileRouter.put('/files', () => { });
 fileRouter.delete('/files', () => { });

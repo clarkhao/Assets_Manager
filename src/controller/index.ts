@@ -1,0 +1,1 @@
+export {uploadHandler} from './upload';
