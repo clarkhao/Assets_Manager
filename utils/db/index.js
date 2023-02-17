@@ -1,0 +1,70 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PGConnect = exports.db = void 0;
+const pg_1 = require("pg");
+const config = require('config');
+class PGConnect {
+    constructor(db) {
+        this.credentials = {
+            user: process.env[config.get('db.user')] || '',
+            host: process.env[config.get('db.host')] || '',
+            database: db,
+            password: process.env[config.get('db.pwd')] || '',
+            port: config.get('db.port'),
+            ssl: true
+            //connectionTimeoutMillis: 2000
+        };
+        this.pool = new pg_1.Pool(this.credentials);
+    }
+    /**
+     * 封装了普通查询和事务查询
+     * @param text sql clauses
+     * @param values values in sql clauses, indicated by $1, $2 ...
+     * @param options options.isReturning=true, 函数返回boolean,
+     *                options.isReturing=false时，insert,update和delete最后使用returning语句, 函数返回T[]
+     *                options.isTransaction
+     * @param handler optional handler occured in a transaction situation
+     * @param args the arguments binded with handler
+     * @returns Promise<boolean | T[] | Error>
+     */
+    connect(text, options, values, handler, args) {
+        return this.pool.connect().then((client) => __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c, _d;
+            try {
+                (_a = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _a !== void 0 ? _a : yield client.query('BEGIN');
+                const result = yield client.query(text, values);
+                (_b = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _b !== void 0 ? _b : handler === null || handler === void 0 ? void 0 : handler.apply(null, args);
+                (_c = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _c !== void 0 ? _c : yield client.query('COMMIT');
+                if ((result.command === 'INSERT' || result.command === 'UPDATE' || result.command === 'DELETE') && !(options === null || options === void 0 ? void 0 : options.isReturning)) {
+                    if (result.rowCount > 0)
+                        return true;
+                    else
+                        return false;
+                }
+                else {
+                    return result.rows;
+                }
+            }
+            catch (err) {
+                (_d = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _d !== void 0 ? _d : yield client.query('ROLLBACK');
+                console.log(err);
+                return Error('query faild');
+            }
+            finally {
+                client.release();
+            }
+        }));
+    }
+}
+exports.PGConnect = PGConnect;
+const db = new PGConnect(process.env[config.get('db.name')]);
+exports.db = db;

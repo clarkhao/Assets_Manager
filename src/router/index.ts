@@ -1,0 +1,1 @@
+export { routerApiDoc } from './v0';
