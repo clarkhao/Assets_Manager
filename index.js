@@ -14,8 +14,9 @@ const port = config.get('server.port');
 //bodyParser用于解析请求体，即req.body
 app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
-app.use(middleware_1.LoggerRouter);
+app.use(middleware_1.loggerHandler);
 app.use(router_1.routerApiDoc);
+app.use(middleware_1.errorHandler);
 app.listen(port, () => {
     console.log(`
         NODE_ENV is ${process.env.NODE_ENV}

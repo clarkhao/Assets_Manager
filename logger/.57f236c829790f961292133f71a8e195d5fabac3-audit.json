@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 7
+    },
+    "auditLog": "/home/runner/AssetsManager/logger/.57f236c829790f961292133f71a8e195d5fabac3-audit.json",
+    "files": [
+        {
+            "date": 1676606507657,
+            "name": "/home/runner/AssetsManager/logger/request-2023-07.log",
+            "hash": "ec7243030885d077e65d16f35bd1583eaa96a9e9b06a586035c27c18270be3aa"
+        }
+    ],
+    "hashType": "sha256"
+}

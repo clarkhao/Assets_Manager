@@ -1,2 +1,2 @@
 export { db, PGConnect } from './db';
-export {logger} from './logger';
+export {logger, debugLogger} from './logger';

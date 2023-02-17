@@ -1,9 +1,6 @@
 import express, { RequestHandler } from "express";
 import {logger} from '../utils';
 
-//观察所有请求来源
-const LoggerRouter = express.Router();
-
 const loggerHandler: RequestHandler = async function(req, res, next) {
   res.on('finish', () => {
     logger.info({
@@ -16,6 +13,5 @@ const loggerHandler: RequestHandler = async function(req, res, next) {
   })
   next();
 }
-LoggerRouter.use(loggerHandler);
 
-export {LoggerRouter};
+export {loggerHandler};
