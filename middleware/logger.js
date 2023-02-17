@@ -14,13 +14,24 @@ const utils_1 = require("../utils");
 const loggerHandler = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         res.on('finish', () => {
-            utils_1.logger.info({
-                method: req.method,
-                url: req.url,
-                body: req.body,
-                status: res.statusCode,
-                resHeaders: res.getHeaders(),
-            });
+            if (res.statusCode < 400) {
+                utils_1.logger.info({
+                    method: req.method,
+                    url: req.url,
+                    body: req.body,
+                    status: res.statusCode,
+                    resHeaders: res.getHeaders(),
+                });
+            }
+            else {
+                utils_1.logger.error({
+                    method: req.method,
+                    url: req.url,
+                    body: req.body,
+                    status: res.statusCode,
+                    resHeaders: res.getHeaders(),
+                });
+            }
         });
         next();
     });
