@@ -24,8 +24,21 @@ const uploadHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, func
             let failed = [];
             const multi = Array.isArray(files.filename);
             try {
-                const fileList = files.filename;
-                for (const file of fileList) {
+                if (multi) {
+                    const fileList = files.filename;
+                    for (const file of fileList) {
+                        const fileSave = new model_1.Files(file.newFilename, [], file);
+                        const result = fileSave.createFile();
+                        if (result instanceof Error) {
+                            failed = [...failed, file.originalFilename];
+                        }
+                        else {
+                            success = [...success, { now: file.newFilename, original: file.originalFilename }];
+                        }
+                    }
+                }
+                else {
+                    const file = files.filename;
                     const fileSave = new model_1.Files(file.newFilename, [], file);
                     const result = fileSave.createFile();
                     if (result instanceof Error) {
@@ -38,7 +51,7 @@ const uploadHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 res.status(201).json({ msg: 'ok', multi, success, failed });
             }
             catch (error) {
-                utils_1.logger.error(error);
+                utils_1.debugLogger.debug(`error from upload controller: ${error}`);
                 next(error);
             }
         }

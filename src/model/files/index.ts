@@ -15,18 +15,16 @@ class Files {
   public createFile() {
     try {
       if (this.file !== null) {
-        const data = fs.readFileSync(this.file.filepath, { encoding: 'utf-8' });
+        const data = fs.readFileSync(this.file.filepath);
         const originalFilename = this.file.originalFilename;
         const suffix = originalFilename?.split('.').reverse()[0];
-        fs.writeFile(path.join(process.cwd(), `../../public/${this.name.concat(`.${suffix}`)}`), data, (err) => {
-          if(err) throw new Error('503 failed to save')
-        });
+        fs.writeFileSync(path.join(__dirname, `../../public/${this.name.concat(`.${suffix}`)}`), data);
         return this.name.concat(`.${suffix}`);
       } else {
         return new Error(`400 empty files`);
       }
     } catch (err) {
-      return new Error(`500 server inner mistake`);
+      return new Error(`503 failed to save`);
     }
   }
 }

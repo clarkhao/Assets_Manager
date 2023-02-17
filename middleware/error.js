@@ -13,7 +13,7 @@ exports.errorHandler = void 0;
 const utils_1 = require("../utils");
 //错误处理
 const errorHandler = (err, req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    utils_1.logger.error(err.stack);
+    utils_1.debugLogger.debug(`from error middleware: ${err.stack}`);
     try {
         const [numStr, ...messageArray] = err.message.split(' ');
         const num = parseInt(numStr);
@@ -22,7 +22,7 @@ const errorHandler = (err, req, res, next) => __awaiter(void 0, void 0, void 0, 
         res.status(statusCode).json({ error: message });
     }
     catch (error) {
-        utils_1.logger.error(`from errorHandler: ${error}`);
+        utils_1.debugLogger.debug(`from errorHandler: ${error}`);
         res.status(500).json({ msg: `${error}` });
     }
 });

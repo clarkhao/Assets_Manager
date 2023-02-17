@@ -16,13 +16,10 @@ class Files {
     createFile() {
         try {
             if (this.file !== null) {
-                const data = fs_1.default.readFileSync(this.file.filepath, { encoding: 'utf-8' });
+                const data = fs_1.default.readFileSync(this.file.filepath);
                 const originalFilename = this.file.originalFilename;
                 const suffix = originalFilename === null || originalFilename === void 0 ? void 0 : originalFilename.split('.').reverse()[0];
-                fs_1.default.writeFile(path_1.default.join(process.cwd(), `../../public/${this.name.concat(`.${suffix}`)}`), data, (err) => {
-                    if (err)
-                        throw new Error('503 failed to save');
-                });
+                fs_1.default.writeFileSync(path_1.default.join(__dirname, `../../public/${this.name.concat(`.${suffix}`)}`), data);
                 return this.name.concat(`.${suffix}`);
             }
             else {
@@ -30,7 +27,7 @@ class Files {
             }
         }
         catch (err) {
-            return new Error(`500 server inner mistake`);
+            return new Error(`503 failed to save`);
         }
     }
 }
