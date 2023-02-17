@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { routerApiDoc } from './router';
-import {loggerHandler,errorHandler} from './middleware';
+import {loggerHandler,errorHandler,authHandler} from './middleware';
 require('dotenv').config();
 const config = require('config');
 
@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(loggerHandler);
 app.use(routerApiDoc);
+app.use(authHandler);
 app.use(errorHandler);
 
 app.listen(port, () => {

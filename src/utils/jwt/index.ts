@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { debugLogger } from '../logger';
+import { logger, debugLogger } from '../logger';
 
 const validateToken = (token: string) => {
   try {
@@ -7,6 +7,7 @@ const validateToken = (token: string) => {
     debugLogger.debug(payload);
     return Promise.resolve(payload);
   } catch (err) {
+    logger.error(err);
     return Promise.reject(`403 ${err}`);
   }
 
