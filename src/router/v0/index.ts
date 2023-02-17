@@ -73,13 +73,17 @@ const options = {
 				}
 			},
 			securitySchemes: {
-				HttpOnlyCookie: {
+				bearerAuth: {
 					type: 'apiKey',
-					in: 'cookie',
-					name: 'token'
+          name: 'Authorization',
+          schema: 'bearer',
+					in: 'header'
 				}
 			}
-		}
+		},
+		security: [{
+      bearerAuth: []
+    }]
 	},
 	apis: [`./src/router/v0/*/*.ts`],
 };
