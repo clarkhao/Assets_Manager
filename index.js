@@ -16,6 +16,7 @@ app.use(body_parser_1.default.json());
 app.use(body_parser_1.default.urlencoded({ extended: true }));
 app.use(middleware_1.loggerHandler);
 app.use(router_1.routerApiDoc);
+app.use(middleware_1.authHandler);
 app.use(middleware_1.errorHandler);
 app.listen(port, () => {
     console.log(`

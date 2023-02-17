@@ -1,17 +1,20 @@
 {
-    "server": {
-        "host": "https://assetsmanager.clarkhao.repl.co",
-        "port": 443
-    },
-    "key": "JWT_KEY",
-    "db": {
-        "host": "DB_HOST",
-        "user": "DB_ADMIN",
-        "name": "DB_NAME",
-        "pwd": "DB_PWD",
-        "port": 5432
-    },
-    "pagination": {
-        "limit": 20
-    }
+  "server": {
+      "host": "https://assetsmanager.clarkhao.repl.co",
+      "port": 443
+  },
+  "key": "JWT_KEY",
+  "db": {
+      "host": "DB_HOST",
+      "user": "DB_ADMIN",
+      "name": "DB_NAME",
+      "pwd": "DB_PWD",
+      "port": 5432
+  },
+  "pagination": {
+      "limit": 20
+  },
+  "storage": {
+    "token": "STORAGE_TOKEN"
+  }
 }
