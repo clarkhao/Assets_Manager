@@ -8,16 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoggerRouter = void 0;
-const express_1 = __importDefault(require("express"));
+exports.loggerHandler = void 0;
 const utils_1 = require("../utils");
-//观察所有请求来源
-const LoggerRouter = express_1.default.Router();
-exports.LoggerRouter = LoggerRouter;
 const loggerHandler = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         res.on('finish', () => {
@@ -32,4 +25,4 @@ const loggerHandler = function (req, res, next) {
         next();
     });
 };
-LoggerRouter.use(loggerHandler);
+exports.loggerHandler = loggerHandler;

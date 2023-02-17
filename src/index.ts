@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { routerApiDoc } from './router';
-import {LoggerRouter} from './middleware';
+import {loggerHandler,errorHandler} from './middleware';
 require('dotenv').config();
 const config = require('config');
 
@@ -10,8 +10,9 @@ const port = config.get('server.port');
 //bodyParser用于解析请求体，即req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(LoggerRouter);
+app.use(loggerHandler);
 app.use(routerApiDoc);
+app.use(errorHandler);
 
 app.listen(port, () => {
 	console.log(`

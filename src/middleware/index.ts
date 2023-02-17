@@ -1,1 +1,2 @@
-export {LoggerRouter} from './logger';
+export {loggerHandler} from './logger';
+export {errorHandler} from './error';
