@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateFile = exports.createFile = void 0;
+exports.deleteFile = exports.updateFile = exports.createFile = void 0;
 const model_1 = require("../../model");
 const utils_1 = require("../../utils");
 const createFile = (file) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,3 +67,12 @@ const updateFile = (oldName, newName) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.updateFile = updateFile;
+/**
+*
+*/
+const deleteFile = (name) => __awaiter(void 0, void 0, void 0, function* () {
+    const fileInstance = new model_1.LogWithDB(name);
+    fileInstance.setDB(utils_1.db);
+    return fileInstance.deleteFileRecord(name, fileInstance.deleteFile, fileInstance, []);
+});
+exports.deleteFile = deleteFile;

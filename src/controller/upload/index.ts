@@ -27,9 +27,11 @@ const uploadHandler: RequestHandler = async (req, res, next) => {
           success = successItem;
           failed = failedItem;
         }
+        if (success.length === 0) {
+          throw new Error("500 all failed to create");
+        }
         res.status(201).json({ msg: 'ok', multi, success, failed });
       } catch (error) {
-        debugLogger.debug(`error from upload controller: ${error}`);
         next(error);
       }
     } else {

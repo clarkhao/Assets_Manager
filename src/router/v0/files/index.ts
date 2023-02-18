@@ -1,5 +1,5 @@
 import express from 'express';
-import { uploadHandler, updateFileHandler } from '../.././../controller';
+import { uploadHandler, updateFileHandler, deleteFileHandler,getListHandler } from '../.././../controller';
 
 //add authentication middleware
 const fileRouter = express.Router();
@@ -61,8 +61,6 @@ const fileRouter = express.Router();
  *                     type: string
  *                   description: array of file names listed
  *               example:
- *                 msg: 'OK'
- *                 names: ['a','b']
  *       400: 
  *         $ref: '#/components/responses/BadRequest'
  *       401: 
@@ -120,24 +118,8 @@ const fileRouter = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 msg: 
- *                   type: string
- *                 result:
- *                   type: array
- *                   items:
- *                     type: string
- *                   description: array of file names deleted
- *                 failed:
- *                   type: array
- *                   items:
- *                     type: string
- *                   description: array of file names not deleted
+ *               $ref: '#/components/schemas/DeleteResult'
  *               example:
- *                 msg: 'OK'
- *                 result: ['a','b']
- *                 failed: ['c','d']
  *       400: 
  *         $ref: '#/components/responses/BadRequest'
  *       401: 
@@ -149,8 +131,8 @@ const fileRouter = express.Router();
  */
 
 fileRouter.post('/v0/files', uploadHandler);
-fileRouter.get('/v0/files', () => { });
+fileRouter.get('/v0/files', getListHandler);
 fileRouter.put('/v0/files', updateFileHandler);
-fileRouter.delete('/v0/files', () => { });
+fileRouter.delete('/v0/files', deleteFileHandler);
 
 export { fileRouter };

@@ -49,6 +49,13 @@ const updateFile = async (oldName: string, newName: string) => {
       return result[0];
     }
   }
-
 }
-export { createFile, updateFile };
+/** 
+*
+*/
+const deleteFile = async (name: string) => {
+  const fileInstance = new LogWithDB(name);
+  fileInstance.setDB(db);
+  return fileInstance.deleteFileRecord(name, fileInstance.deleteFile, fileInstance, []);
+}
+export { createFile, updateFile, deleteFile };

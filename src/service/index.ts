@@ -1,1 +1,1 @@
-export { createFile, updateFile } from './files';
+export { createFile, updateFile, deleteFile } from './files';

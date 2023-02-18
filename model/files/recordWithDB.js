@@ -38,6 +38,11 @@ function ScaleLogWithDB(Base) {
         where "name"=$1;
       `, { isReturning: false, isTransaction: false }, [name]);
         }
+        readFiles(limit, offset) {
+            return this._database && this._database.connect(`
+        select * from deta.asset order by "createAt" asc limit $1 offset $2;
+      `, { isReturning: false, isTransaction: false }, [limit, offset]);
+        }
         updateFileRecord(oldName, newName, handler, object, args) {
             return this._database && this._database.connect(`
         with temp_table as (
@@ -48,6 +53,13 @@ function ScaleLogWithDB(Base) {
         where "id" in (select id from temp_table)
         returning *;
       `, { isReturning: true, isTransaction: true }, [oldName, newName], handler, object, args);
+        }
+        deleteFileRecord(name, handler, object, args) {
+            return this._database && this._database.connect(`
+        delete from deta.asset
+        where "name"=$1
+        returning "name";
+      `, { isReturning: true, isTransaction: true }, [name], handler, object, args);
         }
     };
 }
