@@ -1,12 +1,12 @@
 import express from 'express';
-import {uploadHandler} from '../.././../controller';
+import { uploadHandler } from '../.././../controller';
 
 //add authentication middleware
 const fileRouter = express.Router();
 
 /**
  * @swagger
- * /files:
+ * /v0/files:
  *   post:
  *     description: upload file with requestBody in the multipart/form-data form
  *     requestBody:
@@ -172,9 +172,9 @@ const fileRouter = express.Router();
  *         $ref: '#/components/responses/ServerMistake'
  */
 
-fileRouter.post('/files', uploadHandler);
-fileRouter.get('/files', () => { });
-fileRouter.put('/files', () => { });
-fileRouter.delete('/files', () => { });
+fileRouter.post('/v0/files', uploadHandler);
+fileRouter.get('/v0/files', () => { });
+fileRouter.put('/v0/files', () => { });
+fileRouter.delete('/v0/files', () => { });
 
 export { fileRouter };

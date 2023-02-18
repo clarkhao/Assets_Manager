@@ -11,7 +11,7 @@ const fileRouter = express_1.default.Router();
 exports.fileRouter = fileRouter;
 /**
  * @swagger
- * /files:
+ * /v0/files:
  *   post:
  *     description: upload file with requestBody in the multipart/form-data form
  *     requestBody:
@@ -176,7 +176,7 @@ exports.fileRouter = fileRouter;
  *       500:
  *         $ref: '#/components/responses/ServerMistake'
  */
-fileRouter.post('/files', controller_1.uploadHandler);
-fileRouter.get('/files', () => { });
-fileRouter.put('/files', () => { });
-fileRouter.delete('/files', () => { });
+fileRouter.post('/v0/files', controller_1.uploadHandler);
+fileRouter.get('/v0/files', () => { });
+fileRouter.put('/v0/files', () => { });
+fileRouter.delete('/v0/files', () => { });
