@@ -36,5 +36,13 @@ class Files {
             }
         });
     }
+    deleteFile() {
+        try {
+            fs_1.default.unlinkSync(path_1.default.join(__dirname, `../../public/${this.name}`));
+        }
+        catch (err) {
+            throw err;
+        }
+    }
 }
 exports.Files = Files;

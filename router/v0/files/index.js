@@ -66,8 +66,6 @@ exports.fileRouter = fileRouter;
  *                     type: string
  *                   description: array of file names listed
  *               example:
- *                 msg: 'OK'
- *                 names: ['a','b']
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  *       401:
@@ -125,24 +123,8 @@ exports.fileRouter = fileRouter;
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 msg:
- *                   type: string
- *                 result:
- *                   type: array
- *                   items:
- *                     type: string
- *                   description: array of file names deleted
- *                 failed:
- *                   type: array
- *                   items:
- *                     type: string
- *                   description: array of file names not deleted
+ *               $ref: '#/components/schemas/DeleteResult'
  *               example:
- *                 msg: 'OK'
- *                 result: ['a','b']
- *                 failed: ['c','d']
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  *       401:
@@ -153,6 +135,6 @@ exports.fileRouter = fileRouter;
  *         $ref: '#/components/responses/ServerMistake'
  */
 fileRouter.post('/v0/files', controller_1.uploadHandler);
-fileRouter.get('/v0/files', () => { });
+fileRouter.get('/v0/files', controller_1.getListHandler);
 fileRouter.put('/v0/files', controller_1.updateFileHandler);
-fileRouter.delete('/v0/files', () => { });
+fileRouter.delete('/v0/files', controller_1.deleteFileHandler);

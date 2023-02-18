@@ -1,7 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateFileHandler = exports.uploadHandler = void 0;
+exports.getListHandler = exports.deleteFileHandler = exports.updateFileHandler = exports.uploadHandler = void 0;
 var upload_1 = require("./upload");
 Object.defineProperty(exports, "uploadHandler", { enumerable: true, get: function () { return upload_1.uploadHandler; } });
 var update_1 = require("./update");
 Object.defineProperty(exports, "updateFileHandler", { enumerable: true, get: function () { return update_1.updateFileHandler; } });
+var delete_1 = require("./delete");
+Object.defineProperty(exports, "deleteFileHandler", { enumerable: true, get: function () { return delete_1.deleteFileHandler; } });
+var getlist_1 = require("./getlist");
+Object.defineProperty(exports, "getListHandler", { enumerable: true, get: function () { return getlist_1.getListHandler; } });

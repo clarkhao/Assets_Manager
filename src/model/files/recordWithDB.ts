@@ -37,6 +37,11 @@ function ScaleLogWithDB<TBase extends Constructor>(Base: TBase) {
         where "name"=$1;
       `, { isReturning: false, isTransaction: false }, [name])
     }
+    readFiles(limit: number, offset: number) {
+      return this._database && this._database.connect<Asset>(`
+        select * from deta.asset order by "createAt" asc limit $1 offset $2;
+      `, { isReturning: false, isTransaction: false }, [limit, offset]);
+    }
     updateFileRecord(oldName: string, newName: string, handler: Function, object: Object, args: unknown[]) {
       return this._database && this._database.connect<Asset>(`
         with temp_table as (
@@ -47,6 +52,13 @@ function ScaleLogWithDB<TBase extends Constructor>(Base: TBase) {
         where "id" in (select id from temp_table)
         returning *;
       `, { isReturning: true, isTransaction: true }, [oldName, newName], handler, object, args);
+    }
+    deleteFileRecord(name: string, handler: Function, object: Object, args: unknown[]) {
+      return this._database && this._database.connect<{ name: string }>(`
+        delete from deta.asset
+        where "name"=$1
+        returning "name";
+      `, { isReturning: true, isTransaction: true }, [name], handler, object, args);
     }
   }
 }

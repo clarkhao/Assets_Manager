@@ -36,6 +36,13 @@ class Files {
         }
       })
   }
+  public deleteFile() {
+    try {
+      fs.unlinkSync(path.join(__dirname, `../../public/${this.name}`));
+    } catch (err) {
+      throw err;
+    }
+  }
 }
 
 export { Files };

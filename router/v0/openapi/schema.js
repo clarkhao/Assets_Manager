@@ -13,6 +13,17 @@ exports.schemas = {
             }
         }
     },
+    Asset: {
+        type: 'object',
+        properties: {
+            id: { type: 'number' },
+            name: { type: 'string' },
+            size: { type: 'number' },
+            mime: { type: 'string' },
+            createAt: { type: 'string' },
+            lastUpdateAt: { type: 'string' }
+        }
+    },
     UploadAsset: {
         type: 'object',
         properties: {
@@ -60,4 +71,32 @@ exports.schemas = {
             }
         }
     },
+    DeleteResult: {
+        type: 'object',
+        properties: {
+            msg: { type: 'string' },
+            success: {
+                type: 'array',
+                items: {
+                    type: 'string'
+                }
+            },
+            failed: {
+                type: 'array',
+                items: { type: 'string' }
+            }
+        }
+    },
+    ReadList: {
+        type: 'object',
+        properties: {
+            msg: { type: 'string' },
+            files: {
+                type: 'array',
+                items: {
+                    '$ref': '#/components/schemas/Asset'
+                }
+            }
+        }
+    }
 };
