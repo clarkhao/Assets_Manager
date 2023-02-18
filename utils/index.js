@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateToken = exports.debugLogger = exports.logger = exports.PGConnect = exports.db = void 0;
+exports.validateFiles = exports.isMimeTypeOK = exports.isSizeOK = exports.validateToken = exports.debugLogger = exports.logger = exports.PGConnect = exports.db = void 0;
 var db_1 = require("./db");
 Object.defineProperty(exports, "db", { enumerable: true, get: function () { return db_1.db; } });
 Object.defineProperty(exports, "PGConnect", { enumerable: true, get: function () { return db_1.PGConnect; } });
@@ -9,3 +9,7 @@ Object.defineProperty(exports, "logger", { enumerable: true, get: function () { 
 Object.defineProperty(exports, "debugLogger", { enumerable: true, get: function () { return logger_1.debugLogger; } });
 var jwt_1 = require("./jwt");
 Object.defineProperty(exports, "validateToken", { enumerable: true, get: function () { return jwt_1.validateToken; } });
+var validate_1 = require("./validate");
+Object.defineProperty(exports, "isSizeOK", { enumerable: true, get: function () { return validate_1.isSizeOK; } });
+Object.defineProperty(exports, "isMimeTypeOK", { enumerable: true, get: function () { return validate_1.isMimeTypeOK; } });
+Object.defineProperty(exports, "validateFiles", { enumerable: true, get: function () { return validate_1.validateFiles; } });

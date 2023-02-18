@@ -15,10 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.uploadHandler = void 0;
 const formidable_1 = __importDefault(require("formidable"));
 const utils_1 = require("../../utils");
-const model_1 = require("../../model");
+const service_1 = require("../../service");
 const uploadHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const form = (0, formidable_1.default)({ multiples: true });
     form.parse(req, (err, fields, files) => __awaiter(void 0, void 0, void 0, function* () {
+        utils_1.debugLogger.debug(`from controller upload fields: ${JSON.stringify(fields)}`);
+        utils_1.debugLogger.debug(`from controller upload files: ${JSON.stringify(files)}`);
         if (!err) {
             let success = [];
             let failed = [];
@@ -27,26 +29,16 @@ const uploadHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 if (multi) {
                     const fileList = files.filename;
                     for (const file of fileList) {
-                        const fileSave = new model_1.Files(file.newFilename, [], file);
-                        const result = fileSave.createFile();
-                        if (result instanceof Error) {
-                            failed = [...failed, file.originalFilename];
-                        }
-                        else {
-                            success = [...success, { now: file.newFilename, original: file.originalFilename }];
-                        }
+                        const { successItem, failedItem } = (0, service_1.createFile)(file);
+                        success = [...success, ...successItem];
+                        failed = [...failed, ...failedItem];
                     }
                 }
                 else {
                     const file = files.filename;
-                    const fileSave = new model_1.Files(file.newFilename, [], file);
-                    const result = fileSave.createFile();
-                    if (result instanceof Error) {
-                        failed = [...failed, file.originalFilename];
-                    }
-                    else {
-                        success = [...success, { now: file.newFilename, original: file.originalFilename }];
-                    }
+                    const { successItem, failedItem } = (0, service_1.createFile)(file);
+                    success = successItem;
+                    failed = failedItem;
                 }
                 res.status(201).json({ msg: 'ok', multi, success, failed });
             }
