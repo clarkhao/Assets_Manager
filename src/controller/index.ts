@@ -1,1 +1,2 @@
-export {uploadHandler} from './upload';
+export { uploadHandler } from './upload';
+export { updateFileHandler } from './update';

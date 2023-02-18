@@ -29,14 +29,14 @@ const uploadHandler = (req, res, next) => __awaiter(void 0, void 0, void 0, func
                 if (multi) {
                     const fileList = files.filename;
                     for (const file of fileList) {
-                        const { successItem, failedItem } = (0, service_1.createFile)(file);
+                        const { successItem, failedItem } = yield (0, service_1.createFile)(file);
                         success = [...success, ...successItem];
                         failed = [...failed, ...failedItem];
                     }
                 }
                 else {
                     const file = files.filename;
-                    const { successItem, failedItem } = (0, service_1.createFile)(file);
+                    const { successItem, failedItem } = yield (0, service_1.createFile)(file);
                     success = successItem;
                     failed = failedItem;
                 }

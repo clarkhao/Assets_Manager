@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PGConnect = exports.db = void 0;
 const pg_1 = require("pg");
 const config = require('config');
+const logger_1 = require("../logger");
 class PGConnect {
     constructor(db) {
         this.credentials = {
@@ -32,18 +33,17 @@ class PGConnect {
      * @param options options.isReturning=true, 函数返回boolean,
      *                options.isReturing=false时，insert,update和delete最后使用returning语句, 函数返回T[]
      *                options.isTransaction
-     * @param handler optional handler occured in a transaction situation
+     * @param handler optional handler occured in a transaction situation, not async function
      * @param args the arguments binded with handler
      * @returns Promise<boolean | T[] | Error>
      */
-    connect(text, options, values, handler, args) {
+    connect(text, options, values, handler, object, args) {
         return this.pool.connect().then((client) => __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d;
             try {
-                (_a = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _a !== void 0 ? _a : yield client.query('BEGIN');
+                (options === null || options === void 0 ? void 0 : options.isTransaction) && (yield client.query('BEGIN'));
                 const result = yield client.query(text, values);
-                (_b = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _b !== void 0 ? _b : handler === null || handler === void 0 ? void 0 : handler.apply(null, args);
-                (_c = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _c !== void 0 ? _c : yield client.query('COMMIT');
+                (options === null || options === void 0 ? void 0 : options.isTransaction) && (handler === null || handler === void 0 ? void 0 : handler.apply(object, args));
+                (options === null || options === void 0 ? void 0 : options.isTransaction) && (yield client.query('COMMIT'));
                 if ((result.command === 'INSERT' || result.command === 'UPDATE' || result.command === 'DELETE') && !(options === null || options === void 0 ? void 0 : options.isReturning)) {
                     if (result.rowCount > 0)
                         return true;
@@ -55,9 +55,9 @@ class PGConnect {
                 }
             }
             catch (err) {
-                (_d = options === null || options === void 0 ? void 0 : options.isTransaction) !== null && _d !== void 0 ? _d : yield client.query('ROLLBACK');
-                console.log(err);
-                return Error('query faild');
+                (options === null || options === void 0 ? void 0 : options.isTransaction) && (yield client.query('ROLLBACK'));
+                logger_1.debugLogger.debug(`from db utils connect: ${err}`);
+                return Error(`${err}`);
             }
             finally {
                 client.release();

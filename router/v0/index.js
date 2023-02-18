@@ -8,6 +8,8 @@ const express_1 = __importDefault(require("express"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const config = require('config');
+const response_1 = require("./openapi/response");
+const schema_1 = require("./openapi/schema");
 const routerApiDoc = express_1.default.Router();
 exports.routerApiDoc = routerApiDoc;
 const options = {
@@ -25,60 +27,10 @@ const options = {
             },
         ],
         components: {
-            responses: {
-                BadRequest: {
-                    description: '400 Client side errors',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                '$ref': '#/components/schemas/SimpleMessage'
-                            }
-                        }
-                    }
-                },
-                FailedAuth: {
-                    description: '401 Authentication information is missing or invalid',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                '$ref': '#/components/schemas/SimpleMessage'
-                            }
-                        }
-                    }
-                },
-                NotFound: {
-                    description: '404 The user name or email not found or invalid',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                '$ref': '#/components/schemas/SimpleMessage'
-                            }
-                        }
-                    }
-                },
-                ServerMistake: {
-                    description: '500 Server Inner Mistake',
-                    content: {
-                        'application/json': {
-                            schema: {
-                                '$ref': '#/components/schemas/SimpleMessage'
-                            }
-                        }
-                    }
-                }
-            },
-            schemas: {
-                SimpleMessage: {
-                    type: 'object',
-                    properties: {
-                        message: {
-                            type: 'string'
-                        }
-                    }
-                }
-            },
+            responses: response_1.responses,
+            schemas: schema_1.schemas,
             securitySchemes: {
-                bearerAuth: {
+                BearerAuth: {
                     type: 'apiKey',
                     name: 'Authorization',
                     schema: 'bearer',
@@ -87,7 +39,7 @@ const options = {
             }
         },
         security: [{
-                bearerAuth: []
+                BearerAuth: []
             }]
     },
     apis: [`./src/router/v0/*/*.ts`],

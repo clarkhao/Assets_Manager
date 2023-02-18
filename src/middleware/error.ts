@@ -8,7 +8,7 @@ const errorHandler: ErrorRequestHandler = async (err, req, res, next) => {
         const num = parseInt(numStr);
         const statusCode = Number.isNaN(num) ? 400 : num;
         const message = Number.isNaN(num) ? err.message : messageArray.join(' ');
-        res.status(statusCode).json({error: message});
+        res.status(statusCode).json({msg: message});
     } catch(error) {
         debugLogger.debug(`from errorHandler: ${error}`);
         res.status(500).json({msg: `${error}`});

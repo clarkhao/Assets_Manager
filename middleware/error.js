@@ -19,7 +19,7 @@ const errorHandler = (err, req, res, next) => __awaiter(void 0, void 0, void 0, 
         const num = parseInt(numStr);
         const statusCode = Number.isNaN(num) ? 400 : num;
         const message = Number.isNaN(num) ? err.message : messageArray.join(' ');
-        res.status(statusCode).json({ error: message });
+        res.status(statusCode).json({ msg: message });
     }
     catch (error) {
         utils_1.debugLogger.debug(`from errorHandler: ${error}`);
