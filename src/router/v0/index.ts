@@ -3,6 +3,9 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 const config = require('config');
 
+import {responses} from './openapi/response';
+import {schemas} from './openapi/schema';
+
 const routerApiDoc = express.Router();
 
 const options = {
@@ -20,60 +23,10 @@ const options = {
 			},
 		],
 		components: {
-			responses: {
-				BadRequest: {
-					description: '400 Client side errors',
-					content: {
-						'application/json': {
-							schema: {
-								'$ref': '#/components/schemas/SimpleMessage'
-							}
-						}
-					}
-				},
-				FailedAuth: {
-					description: '401 Authentication information is missing or invalid',
-					content: {
-						'application/json': {
-							schema: {
-								'$ref': '#/components/schemas/SimpleMessage'
-							}
-						}
-					}
-				},
-				NotFound: {
-					description: '404 The user name or email not found or invalid',
-					content: {
-						'application/json': {
-							schema: {
-								'$ref': '#/components/schemas/SimpleMessage'
-							}
-						}
-					}
-				},
-				ServerMistake: {
-					description: '500 Server Inner Mistake',
-					content: {
-						'application/json': {
-							schema: {
-								'$ref': '#/components/schemas/SimpleMessage'
-							}
-						}
-					}
-				}
-			},
-			schemas: {
-				SimpleMessage: {
-					type: 'object',
-					properties: {
-						message: {
-							type: 'string'
-						}
-					}
-				}
-			},
+			responses: responses,
+			schemas: schemas,
 			securitySchemes: {
-				bearerAuth: {
+				BearerAuth: {
 					type: 'apiKey',
           name: 'Authorization',
           schema: 'bearer',
@@ -82,7 +35,7 @@ const options = {
 			}
 		},
 		security: [{
-      bearerAuth: []
+      BearerAuth: []
     }]
 	},
 	apis: [`./src/router/v0/*/*.ts`],

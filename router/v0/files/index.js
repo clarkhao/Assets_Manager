@@ -28,25 +28,13 @@ exports.fileRouter = fileRouter;
  *                   type: string
  *                   format: binary
  *     responses:
- *       200:
+ *       201:
  *         description: successfully upload files
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 msg:
- *                   type: string
- *                 multi:
- *                   type: boolean
- *                   description: are multi files or not uploaded
- *                 result:
- *                   type: string
- *                   description: name of file uploaded successfully
+ *               $ref: '#/components/schemas/UploadSuccess'
  *               example:
- *                 msg: 'OK'
- *                 multi: false
- *                 result: 'some.jpg'
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  *       401:
@@ -91,7 +79,7 @@ exports.fileRouter = fileRouter;
  *   put:
  *     description: update a file with new name
  *     requestBody:
- *       description: name string sent as application/x-www-form-urlencoded
+ *       description: new name sent as application/x-www-form-urlencoded
  *       content:
  *         application/x-www-form-urlencoded:
  *           schema:
@@ -104,27 +92,15 @@ exports.fileRouter = fileRouter;
  *         name: filename
  *         schema:
  *           type: string
- *         description: file name key-value pairs to be updated
+ *         description: old filename key-value pairs to be updated
  *     responses:
  *       200:
  *         description: successfully update file
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 msg:
- *                   type: string
- *                 update:
- *                   type: boolean
- *                   description: has the update been successfully
- *                 newName:
- *                   type: string
- *                   description: new name of file updated
+ *               $ref: '#/components/schemas/UpdateSuccess'
  *               example:
- *                 msg: 'OK'
- *                 update: true
- *                 newName: 'background.jpg'
  *       400:
  *         $ref: '#/components/responses/BadRequest'
  *       401:
@@ -178,5 +154,5 @@ exports.fileRouter = fileRouter;
  */
 fileRouter.post('/v0/files', controller_1.uploadHandler);
 fileRouter.get('/v0/files', () => { });
-fileRouter.put('/v0/files', () => { });
+fileRouter.put('/v0/files', controller_1.updateFileHandler);
 fileRouter.delete('/v0/files', () => { });

@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 const config = require('config');
+import { debugLogger } from '../logger';
 
 type Credentials = {
   user: string,
@@ -38,17 +39,17 @@ class PGConnect {
    * @param options options.isReturning=true, 函数返回boolean, 
    *                options.isReturing=false时，insert,update和delete最后使用returning语句, 函数返回T[]
    *                options.isTransaction
-   * @param handler optional handler occured in a transaction situation
+   * @param handler optional handler occured in a transaction situation, not async function
    * @param args the arguments binded with handler
    * @returns Promise<boolean | T[] | Error>
    */
-  public connect<T>(text: string, options: ConnectOption, values?: unknown[], handler?: Function, args?: unknown[]) {
+  public connect<T>(text: string, options: ConnectOption, values?: unknown[], handler?: Function, object?: Object, args?: unknown[]) {
     return this.pool.connect().then(async client => {
       try {
-        options?.isTransaction ?? await client.query('BEGIN');
+        options?.isTransaction && await client.query('BEGIN');
         const result = await client.query(text, values);
-        options?.isTransaction ?? handler?.apply(null, args);
-        options?.isTransaction ?? await client.query('COMMIT');
+        options?.isTransaction && handler?.apply(object, args);
+        options?.isTransaction && await client.query('COMMIT');
         if ((result.command === 'INSERT' || result.command === 'UPDATE' || result.command === 'DELETE') && !options?.isReturning) {
           if (result.rowCount > 0)
             return true;
@@ -58,9 +59,9 @@ class PGConnect {
           return result.rows as T[];
         }
       } catch (err) {
-        options?.isTransaction ?? await client.query('ROLLBACK');
-        console.log(err);
-        return Error('query faild');
+        options?.isTransaction && await client.query('ROLLBACK');
+        debugLogger.debug(`from db utils connect: ${err}`);
+        return Error(`${err}`);
       } finally {
         client.release();
       }
