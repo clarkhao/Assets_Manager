@@ -25,8 +25,28 @@ exports.responses = {
             }
         }
     },
+    InvalidPWD: {
+        description: '403 not authorized',
+        content: {
+            'application/json': {
+                schema: {
+                    '$ref': '#/components/schemas/SimpleMessage'
+                }
+            }
+        }
+    },
     NotFound: {
         description: '404 The user name or email not found or invalid',
+        content: {
+            'application/json': {
+                schema: {
+                    '$ref': '#/components/schemas/SimpleMessage'
+                }
+            }
+        }
+    },
+    ConflictId: {
+        description: '409 Already used user name or email',
         content: {
             'application/json': {
                 schema: {

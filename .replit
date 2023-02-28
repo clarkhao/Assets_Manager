@@ -2,6 +2,8 @@ entrypoint = "index.js"
 
 hidden = [".config", "package-lock.json"]
 
+run = "npm run dev"
+
 [interpreter]
 command = [
     "prybar-nodejs",
