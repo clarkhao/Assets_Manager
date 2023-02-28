@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Files = void 0;
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
+const utils_1 = require("../../utils");
+const util_1 = require("util");
 class Files {
     constructor(name = '', names = [], file) {
         this.name = name;
@@ -13,36 +15,35 @@ class Files {
         this.file = file;
     }
     createFile() {
+        var _a, _b, _c;
         try {
-            if (this.file !== null && this.file !== undefined) {
-                const data = fs_1.default.readFileSync(this.file.filepath);
-                const originalFilename = this.file.originalFilename;
-                const suffix = originalFilename === null || originalFilename === void 0 ? void 0 : originalFilename.split('.').reverse()[0];
-                fs_1.default.writeFileSync(path_1.default.join(__dirname, `../../public/${this.file.newFilename.concat(`.${suffix}`)}`), data);
-                return this.name.concat(`.${suffix}`);
-            }
-            else {
-                throw new Error(`400 empty files`);
-            }
+            const originalFilepath = (_a = this.file) === null || _a === void 0 ? void 0 : _a.filepath;
+            const originalFilename = (_b = this.file) === null || _b === void 0 ? void 0 : _b.originalFilename;
+            const suffix = originalFilename === null || originalFilename === void 0 ? void 0 : originalFilename.split('.').reverse()[0];
+            const readStream = fs_1.default.createReadStream(originalFilepath);
+            const writeStream = fs_1.default.createWriteStream(path_1.default.join(__dirname, `../../public/${(_c = this.file) === null || _c === void 0 ? void 0 : _c.newFilename.concat(`.${suffix}`)}`));
+            readStream.pipe(writeStream);
+            return this.name.concat(`.${suffix}`);
         }
         catch (err) {
             throw new Error(`500 failed to save`);
         }
     }
     updateFile(newName) {
-        fs_1.default.rename(path_1.default.join(__dirname, `../../public/${this.name}`), path_1.default.join(__dirname, `../../public/${newName}`), (err) => {
-            if (err) {
-                throw err;
-            }
+        const promiseRename = (0, util_1.promisify)(fs_1.default.rename);
+        promiseRename(path_1.default.join(__dirname, `../../public/${this.name}`), path_1.default.join(__dirname, `../../public/${newName}`))
+            .catch(err => {
+            utils_1.debugLogger.debug(err.message);
+            throw new Error(`500 inner server mistake`);
         });
     }
     deleteFile() {
-        try {
-            fs_1.default.unlinkSync(path_1.default.join(__dirname, `../../public/${this.name}`));
-        }
-        catch (err) {
-            throw err;
-        }
+        const promiseUnlink = (0, util_1.promisify)(fs_1.default.unlink);
+        promiseUnlink(path_1.default.join(__dirname, `../../public/${this.name}`))
+            .catch(err => {
+            utils_1.debugLogger.debug(err.message);
+            throw new Error(`500 inner server mistake`);
+        });
     }
 }
 exports.Files = Files;

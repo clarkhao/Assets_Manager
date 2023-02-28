@@ -13,19 +13,24 @@ exports.authHandler = void 0;
 const utils_1 = require("../utils");
 const authHandler = function (req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
-        const authHeader = req.headers['authorization'] || req.headers['Authorization'];
-        utils_1.debugLogger.debug(`from auth middleware: ${authHeader}`);
-        if (authHeader) {
-            const token = authHeader.split(' ')[1];
-            (0, utils_1.validateToken)(token).then(res => {
-                if (res instanceof Error)
-                    next(res);
-                else
-                    next();
-            });
+        if (req.url === '/') {
+            res.send('<h1>Welcome</h1>');
         }
         else {
-            next(new Error(`401 not authorized`));
+            const authHeader = req.headers['authorization'] || req.headers['Authorization'];
+            utils_1.debugLogger.debug(`from auth middleware: ${authHeader}`);
+            if (authHeader) {
+                const token = authHeader.split(' ')[1];
+                (0, utils_1.validateToken)(token).then(res => {
+                    if (res instanceof Error)
+                        next(res);
+                    else
+                        next();
+                });
+            }
+            else {
+                next(new Error(`401 not authorized`));
+            }
         }
     });
 };

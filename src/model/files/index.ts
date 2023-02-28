@@ -2,6 +2,7 @@ import fs from 'fs';
 import formidable from 'formidable';
 import path from 'path';
 import { debugLogger } from '../../utils';
+import { promisify } from 'util';
 
 class Files {
   private name: string;
@@ -14,34 +15,33 @@ class Files {
   }
   public createFile() {
     try {
-      if (this.file !== null && this.file !== undefined) {
-        const data = fs.readFileSync(this.file.filepath);
-        const originalFilename = this.file.originalFilename;
-        const suffix = originalFilename?.split('.').reverse()[0];
-        fs.writeFileSync(path.join(__dirname, `../../public/${this.file.newFilename.concat(`.${suffix}`)}`), data);
-        return this.name.concat(`.${suffix}`);
-      } else {
-        throw new Error(`400 empty files`);
-      }
+      const originalFilepath = this.file?.filepath;
+      const originalFilename = this.file?.originalFilename;
+      const suffix = originalFilename?.split('.').reverse()[0];
+      const readStream = fs.createReadStream(originalFilepath as string);
+      const writeStream = fs.createWriteStream(path.join(__dirname, `../../public/${this.file?.newFilename.concat(`.${suffix}`)}`));
+      readStream.pipe(writeStream);
+      return this.name.concat(`.${suffix}`);
     } catch (err) {
       throw new Error(`500 failed to save`);
     }
   }
   public updateFile(newName: string) {
-    fs.rename(path.join(__dirname, `../../public/${this.name}`),
-      path.join(__dirname, `../../public/${newName}`),
-      (err) => {
-        if (err) {
-          throw err;
-        }
+    const promiseRename = promisify(fs.rename);
+    promiseRename(path.join(__dirname, `../../public/${this.name}`),
+      path.join(__dirname, `../../public/${newName}`))
+      .catch(err => {
+        debugLogger.debug(err.message);
+        throw new Error(`500 inner server mistake`);
       })
   }
   public deleteFile() {
-    try {
-      fs.unlinkSync(path.join(__dirname, `../../public/${this.name}`));
-    } catch (err) {
-      throw err;
-    }
+    const promiseUnlink = promisify(fs.unlink);
+    promiseUnlink(path.join(__dirname, `../../public/${this.name}`))
+      .catch(err => {
+        debugLogger.debug(err.message);
+        throw new Error(`500 inner server mistake`);
+      })
   }
 }
 

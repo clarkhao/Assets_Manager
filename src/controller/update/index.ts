@@ -15,7 +15,7 @@ const updateFileHandler: RequestHandler = async (req, res, next) => {
       throw new Error(`empty file name received`);
     const suffix = name.split('.').reverse()[0];
     const update = await updateFile(name, newName);
-    res.status(200).json({ msg: 'OK', update: { ...update, name: newName.concat(`.${suffix}`), original: name } });
+    res.status(200).json({ msg: 'OK', update: { ...update, name: newName, original: name } });
   } catch (err) {
     next(err);
   }
